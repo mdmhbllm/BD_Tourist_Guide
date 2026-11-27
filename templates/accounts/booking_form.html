@@ -17,3 +17,33 @@
     </div></div></form>
   {% endif %}
 </div>
+<script>
+(() => {
+  const start = document.getElementById("id_start_date");
+  const end = document.getElementById("id_end_date");
+  const total = document.getElementById("price-total");
+  const duration = document.getElementById("price-duration");
+  if (!start || !end || !total || !duration) return;
+  const rate = Number(total.dataset.dailyRate);
+  const updatePrice = () => {
+    if (!start.value || !end.value) {
+      duration.textContent = "Choose your trip dates";
+      total.textContent = `BDT ${rate.toLocaleString("en-BD")}`;
+      return;
+    }
+    const startDate = new Date(`${start.value}T00:00:00`);
+    const endDate = new Date(`${end.value}T00:00:00`);
+    const days = Math.round((endDate - startDate) / 86400000) + 1;
+    if (days < 1) {
+      duration.textContent = "End date must be on or after start date";
+      return;
+    }
+    duration.textContent = `${days} day${days === 1 ? "" : "s"} × BDT ${rate.toLocaleString("en-BD")} per day`;
+    total.textContent = `BDT ${(rate * days).toLocaleString("en-BD")}`;
+  };
+  start.addEventListener("change", updatePrice);
+  end.addEventListener("change", updatePrice);
+  updatePrice();
+})();
+</script>
+{% endblock %}
