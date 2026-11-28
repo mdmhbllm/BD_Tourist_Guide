@@ -1,1 +1,39 @@
-<!-- Guide review -->
+{% extends "base.html" %}
+
+{% block title %}Reviews for {{ application.full_name }}{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-body">
+
+        <h1>{{ application.full_name }}</h1>
+
+        <p>{{ application.areas_covered }}</p>
+
+        <h2>Traveler Reviews</h2>
+
+        {% if reviews %}
+            {% for review in reviews %}
+
+                <div class="review-card">
+                    <strong>{{ review.traveler.first_name }}</strong>
+
+                    <p>Rating: {{ review.rating }}/5</p>
+
+                    <p>{{ review.review_text }}</p>
+
+                    <p>{{ review.created_at }}</p>
+                </div>
+
+            {% empty %}
+                <p>No reviews available.</p>
+            {% endfor %}
+        {% else %}
+            <p>No reviews yet.</p>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
